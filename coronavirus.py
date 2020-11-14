@@ -1,4 +1,6 @@
 '''
+Queries and plots COVID-19 related ONS data in the UK.
+
 https://coronavirus.data.gov.uk/developers-guide#methods
 '''
 
@@ -11,6 +13,7 @@ import numpy as np
 
 class GovData:
     '''
+    Data class for the queried data
     '''
     def __init__(self, raw_data):
         self.data = raw_data['data']
@@ -36,6 +39,7 @@ class GovData:
        
 def parse_arguments():
     '''
+    Parses user-passed arguments
     '''
     parser = argparse.ArgumentParser(description='Process some integers.')  
     
@@ -64,6 +68,7 @@ def parse_arguments():
     
 def make_query(args):
     '''
+    Builds the query string
     '''
     # base string to .gov data
     base_str = 'https://api.coronavirus.data.gov.uk/v1/data?'
@@ -86,6 +91,7 @@ def make_query(args):
 
 def get_data(url):
     '''
+    Actually does the query.
     '''
     response = requests.get(url, timeout=10)
         
@@ -99,20 +105,11 @@ def get_data(url):
 
 def moving_average(values, width):
     '''
+    Does a moving average over ``width`` days
     '''
     average = np.convolve(values, np.ones(width), 'same') / width
     return average
 
-
-def moving_average_rate(values, width):
-    '''
-    '''
-    average = np.convolve(values, np.ones(width), 'same') / width
-    rate = np.diff(average)
-    rate = np.array([0.0] + list(rate))
-    return rate
-
-    
 
 def main():
     '''
@@ -126,6 +123,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
-
-    
